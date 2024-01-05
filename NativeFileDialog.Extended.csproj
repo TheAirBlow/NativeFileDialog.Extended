@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Version>1.1.1</Version>
+        <Title>NativeFileDialog.Extended</Title>
+        <Authors>TheAirBlow, btzy</Authors>
+        <Description>Simple to use C# wrapper for nativefiledialog-extended</Description>
+        <Copyright>Copyright © TheAirBlow 2024</Copyright>
+        <PackageProjectUrl>https://github.com/TheAirBlow/NativeFileDialog.Extended</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/TheAirBlow/NativeFileDialog.Extended/blob/main/LICENCE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/TheAirBlow/NativeFileDialog.Extended</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="libnfd.so" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="libnfd.dylib" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))'">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="nfd.dll" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+</Project>
