@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-ubuntu:
+  build-linux:
     name: Build Linux binary
     runs-on: ubuntu-latest
     steps:
