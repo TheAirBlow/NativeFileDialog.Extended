@@ -11,6 +11,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        submodules: true
     - name: Installing Dependencies
       run: |
         sudo apt-get update
@@ -35,6 +37,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        submodules: true
     - name: Configure
       run: |
         cd nativefiledialog-extended
@@ -55,6 +59,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        submodules: true
     - name: Configure
       run: |
         cd nativefiledialog-extended
