@@ -94,15 +94,15 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Download Linux binary
-      uses: actions/upload-artifact@v2
+      uses: actions/download-artifact@v2
       with:
         name: Linux
     - name: Download MacOS binary
-      uses: actions/upload-artifact@v2
+      uses: actions/download-artifact@v2
       with:
         name: MacOS
     - name: Download Windows binary
-      uses: actions/upload-artifact@v2
+      uses: actions/download-artifact@v2
       with:
         name: Windows
     - name: Build
