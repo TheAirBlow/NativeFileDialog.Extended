@@ -31,7 +31,7 @@ jobs:
     - name: Upload test binaries
       uses: actions/upload-artifact@v2
       with:
-        name: Ubuntu ${{ matrix.os.name }} - ${{ matrix.compiler.name }}, ${{ matrix.portal.name }}, ${{ matrix.autoappend.name }}, ${{ matrix.shared_lib.name }}, C++${{ matrix.cppstd }}
+        name: Linux
         path: nativefiledialog-extended/build/src/*
   build-macos:
     name: Build MacOS binary
