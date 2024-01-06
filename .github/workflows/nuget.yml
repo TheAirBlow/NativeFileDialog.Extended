@@ -1,13 +1,80 @@
-name: Publish Packages
+name: Publish to NuGet
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build:
+  build-ubuntu:
+    name: Build Linux binary
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Installing Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install libdbus-1-dev
+    - name: Configure
+      run: |
+        cd nativefiledialog-extended
+        mkdir build
+        mkdir install
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX="../install" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_STANDARD=20 -DCMAKE_C_FLAGS="-Wall -Wextra -Werror -pedantic" -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror -pedantic" -DNFD_PORTAL=ON -DNFD_APPEND_EXTENSION=OFF -DBUILD_SHARED_LIBS=ON ..
+    - name: Build
+      run: cmake --build build --target install
+    - name: Upload test binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: Ubuntu ${{ matrix.os.name }} - ${{ matrix.compiler.name }}, ${{ matrix.portal.name }}, ${{ matrix.autoappend.name }}, ${{ matrix.shared_lib.name }}, C++${{ matrix.cppstd }}
+        path: nativefiledialog-extended/build/src/*
+  build-macos:
+    name: Build MacOS binary
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Configure
+      run: |
+        cd nativefiledialog-extended
+        mkdir build
+        mkdir install
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX="../install" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-Wall -Wextra -Werror -pedantic" -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror -pedantic" -DBUILD_SHARED_LIBS=ON ..
+    - name: Build
+      run: cmake --build build --target install
+    - name: Upload binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: MacOS
+        path: nativefiledialog-extended/build/src/*
+  build-windows:
+    name: Build Windows binary
     runs-on: windows-latest
-
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Configure
+      run: |
+        cd nativefiledialog-extended
+        mkdir build
+        mkdir install
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX="../install" -DBUILD_SHARED_LIBS=ON ..
+    - name: Build
+      run: |
+        cd nativefiledialog-extended
+        cmake --build build --target install --config Release
+    - name: Upload binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: Windows
+        path: nativefiledialog-extended/build/src/Release/*
+  publish-package:
+    name: Build and publish package
+    runs-on: windows-latest
+    needs: [ build-linux, build-macos, build-windows ]
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -16,9 +83,21 @@ jobs:
         dotnet-version: 7.0.x
     - name: Install dependencies
       run: dotnet restore
+    - name: Download Linux binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: Linux
+    - name: Download MacOS binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: MacOS
+    - name: Download Windows binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: Windows
     - name: Build
       run: dotnet build --configuration Release --no-restore
-    - name: Publish TheAirBlow.Syndical.Library
+    - name: Publish package
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
           PROJECT_FILE_PATH: NativeFileDialog.Extended.csproj
