@@ -1,11 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Version>1.1.2</Version>
+        <Version>1.2.0</Version>
         <Title>NativeFileDialog.Extended</Title>
         <Authors>TheAirBlow, btzy</Authors>
         <Description>Simple to use C# wrapper for nativefiledialog-extended</Description>
@@ -14,17 +13,25 @@
         <PackageLicenseUrl>https://github.com/TheAirBlow/NativeFileDialog.Extended/blob/main/LICENCE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/TheAirBlow/NativeFileDialog.Extended</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="nfd.dll">
+            <PackagePath>runtimes/win-x64/native</PackagePath>
+            <Pack>true</Pack>
+        </Content>
         <Content Include="libnfd.so">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <PackagePath>runtimes/linux-x64/native</PackagePath>
+            <Pack>true</Pack>
         </Content>
         <Content Include="libnfd.dylib">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <PackagePath>runtimes/osx/native</PackagePath>
+            <Pack>true</Pack>
         </Content>
-        <Content Include="nfd.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <Content Include="build\net40\NativeFileDialog.Extended.targets">
+            <PackagePath>build/net40/NativeFileDialog.Extended.targets</PackagePath>
+            <Pack>true</Pack>
         </Content>
     </ItemGroup>
 </Project>
